@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Demo Agentes IA — AYAgentes™</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
-<script src="https://unpkg.com/retell-client-js-sdk/dist/index.umd.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -43,8 +42,9 @@ h1 em{font-style:normal;color:var(--lime)}
 .card-desc{padding:0 1.25rem 1.25rem;font-size:13px;color:var(--muted);line-height:1.6}
 .card-actions{padding:0 1.25rem 1.25rem;display:flex;gap:8px}
 .btn-voice{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:10px;border:none;cursor:pointer;font-family:var(--display);font-size:13px;font-weight:700;transition:all 0.2s;background:var(--lime);color:#080909}
-.btn-voice:hover{opacity:0.9;transform:scale(1.02)}
+.btn-voice:hover{opacity:0.9}
 .btn-voice.active{background:#ff4757;color:#fff;animation:ring 1.5s infinite}
+.btn-voice:disabled{opacity:0.6;cursor:not-allowed}
 @keyframes ring{0%,100%{box-shadow:0 0 0 0 rgba(255,71,87,0.4)}50%{box-shadow:0 0 0 8px rgba(255,71,87,0)}}
 .btn-chat{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-family:var(--display);font-size:13px;font-weight:700;background:transparent;color:var(--text);transition:all 0.2s}
 .btn-chat:hover{border-color:rgba(232,255,71,0.4);background:var(--lime-dim)}
@@ -59,7 +59,7 @@ h1 em{font-style:normal;color:var(--lime)}
 .chat-emoji{font-size:22px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.04);border-radius:8px}
 .chat-name{font-family:var(--display);font-size:15px;font-weight:800}
 .chat-brand{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase}
-.chat-close{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.chat-close{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
 .chat-close:hover{background:rgba(255,255,255,0.06);color:var(--text)}
 .chat-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px}
 .chat-messages::-webkit-scrollbar{width:4px}
@@ -78,15 +78,13 @@ h1 em{font-style:normal;color:var(--lime)}
 .chat-input{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:var(--sans);font-size:14px;outline:none;transition:border-color 0.2s}
 .chat-input:focus{border-color:rgba(232,255,71,0.4)}
 .chat-input::placeholder{color:var(--muted)}
-.chat-send{width:40px;height:40px;border-radius:10px;background:var(--lime);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.2s;flex-shrink:0}
-.chat-send:hover{opacity:0.85}
+.chat-send{width:40px;height:40px;border-radius:10px;background:var(--lime);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chat-send svg{width:16px;height:16px;fill:#080909}
 .api-setup{background:var(--surface);border:1px solid rgba(232,255,71,0.2);border-radius:12px;padding:1.5rem;margin:0 2rem 2rem;max-width:600px}
 .api-setup h3{font-family:var(--display);font-size:16px;margin-bottom:0.5rem;color:var(--lime)}
 .api-setup p{font-size:13px;color:var(--muted);margin-bottom:1rem;line-height:1.5}
 .api-input-row{display:flex;gap:8px}
 .api-input{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none}
-.api-input:focus{border-color:rgba(232,255,71,0.4)}
 .api-save{background:var(--lime);color:#080909;border:none;border-radius:8px;padding:10px 20px;font-family:var(--display);font-weight:700;font-size:13px;cursor:pointer}
 .api-status{font-family:var(--mono);font-size:11px;margin-top:8px;color:var(--muted)}
 .api-status.ok{color:#60f0a0}
@@ -96,8 +94,7 @@ footer strong{color:var(--lime)}
 .voice-section,.chat-section{display:none}
 .voice-section.active,.chat-section.active{display:block}
 @media(max-width:600px){
-  nav{padding:1rem}
-  .hero{padding:2.5rem 1rem 2rem}
+  nav{padding:1rem}.hero{padding:2.5rem 1rem 2rem}
   .agents-grid{padding:1rem;grid-template-columns:1fr}
   .api-setup{margin:0 1rem 1rem}
 }
@@ -137,26 +134,22 @@ footer strong{color:var(--lime)}
     <div class="chat-header">
       <div class="chat-agent-info">
         <div class="chat-emoji" id="modalEmoji"></div>
-        <div>
-          <div class="chat-name" id="modalName"></div>
-          <div class="chat-brand" id="modalBrand"></div>
-        </div>
+        <div><div class="chat-name" id="modalName"></div><div class="chat-brand" id="modalBrand"></div></div>
       </div>
       <button class="chat-close" onclick="closeChat()">✕</button>
     </div>
     <div class="chat-messages" id="chatMessages"></div>
     <div class="chat-input-area">
       <input class="chat-input" id="chatInput" placeholder="Escribe tu mensaje..." onkeydown="handleKey(event)"/>
-      <button class="chat-send" onclick="sendMessage()">
-        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
-      </button>
+      <button class="chat-send" onclick="sendMessage()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button>
     </div>
   </div>
 </div>
-<footer>
-  <p>Powered by <strong>AYAgentes™</strong> · by AYAlgoritmo · <strong>ayagentes.app</strong></p>
-</footer>
-<script>
+<footer><p>Powered by <strong>AYAgentes™</strong> · by AYAlgoritmo · <strong>ayagentes.app</strong></p></footer>
+
+<script type="module">
+const RETELL_KEY = 'key_f3eb9ddafab52cf429cd0bf9bd6f';
+
 const AGENTS = [
   {id:'sofia',name:'Sofía',brand:'DENTALIKA',industry:'Clínica dental',emoji:'🦷',color:'#e8ff47',
    retellId:'agent_04f4d124276b2725238c66ba16',
@@ -178,18 +171,30 @@ const AGENTS = [
    prompt:'Eres Lucía, asistente de AYAlgoritmo, empresa de agentes IA para PyMEs en Ecuador y LATAM. Tecnológica, directa, apasionada. Objetivo: explicar agentes IA, resolver dudas, agendar demos. Respuestas cortas. Siempre termina con invitación a demo gratuita.'}
 ];
 
-const RETELL_KEY = 'key_f3eb9ddafab52cf429cd0bf9bd6f';
 let activeRetellCall = null;
 let activeAgentId = null;
 let currentChatAgent = null;
 let chatHistory = [];
 let anthropicKey = localStorage.getItem('aya_anthropic_key') || '';
+let RetellWebClientClass = null;
+
+// Load Retell SDK via esm.sh
+async function loadRetellSDK() {
+  try {
+    const mod = await import('https://esm.sh/retell-client-js-sdk@3.0.3');
+    RetellWebClientClass = mod.RetellWebClient;
+    console.log('Retell SDK loaded:', RetellWebClientClass);
+  } catch(e) {
+    console.error('Failed to load Retell SDK:', e);
+  }
+}
+loadRetellSDK();
 
 function initApiKey() {
   if (anthropicKey) document.getElementById('apiSetup').style.display = 'none';
 }
 
-function saveApiKey() {
+window.saveApiKey = function() {
   const val = document.getElementById('apiKeyInput').value.trim();
   if (!val.startsWith('sk-ant')) {
     document.getElementById('apiStatus').textContent = '⚠️ Clave inválida';
@@ -216,7 +221,7 @@ document.getElementById('voice-grid').innerHTML = AGENTS.map(a => `
     <div class="card-desc">Habla con ${a.name} en tiempo real — responde como empleado real de ${a.brand}.</div>
     <div class="voice-status" id="vs-${a.id}"><span class="status-dot"></span><span>Conectado · Habla ahora</span></div>
     <div class="card-actions">
-      <button class="btn-voice" id="vb-${a.id}" onclick="toggleVoice('${a.id}')">🎙️ Llamar a ${a.name}</button>
+      <button class="btn-voice" id="vb-${a.id}" onclick="window.toggleVoice('${a.id}')">🎙️ Llamar a ${a.name}</button>
     </div>
   </div>`).join('');
 
@@ -233,26 +238,17 @@ document.getElementById('chat-grid').innerHTML = AGENTS.map(a => `
     </div>
     <div class="card-desc">Chatea con ${a.name} — entrenado para ${a.brand}.</div>
     <div class="card-actions">
-      <button class="btn-chat" onclick="openChat('${a.id}')">💬 Chatear con ${a.name}</button>
+      <button class="btn-chat" onclick="window.openChat('${a.id}')">💬 Chatear con ${a.name}</button>
     </div>
   </div>`).join('');
 
-function switchTab(tab) {
+window.switchTab = function(tab) {
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active',(i===0&&tab==='voice')||(i===1&&tab==='chat')));
   document.getElementById('voice-section').classList.toggle('active',tab==='voice');
   document.getElementById('chat-section').classList.toggle('active',tab==='chat');
 }
 
-// Get RetellWebClient from whatever the SDK exposes
-function getRetellClient() {
-  if (typeof RetellWebClient !== 'undefined') return new RetellWebClient();
-  if (typeof Retell !== 'undefined' && Retell.RetellWebClient) return new Retell.RetellWebClient();
-  if (typeof retell !== 'undefined' && retell.RetellWebClient) return new retell.RetellWebClient();
-  if (window.RetellWebClient) return new window.RetellWebClient();
-  throw new Error('Retell SDK no disponible');
-}
-
-async function toggleVoice(agentId) {
+window.toggleVoice = async function(agentId) {
   const agent = AGENTS.find(a => a.id === agentId);
   const btn = document.getElementById(`vb-${agentId}`);
   const status = document.getElementById(`vs-${agentId}`);
@@ -274,25 +270,40 @@ async function toggleVoice(agentId) {
   }
 
   btn.innerHTML = '⏳ Conectando...'; btn.disabled = true;
+
   try {
-    const client = getRetellClient();
+    if (!RetellWebClientClass) {
+      const mod = await import('https://esm.sh/retell-client-js-sdk@3.0.3');
+      RetellWebClientClass = mod.RetellWebClient;
+    }
+
     const res = await fetch('https://api.retellai.com/v2/create-web-call', {
       method:'POST',
       headers:{'Authorization':`Bearer ${RETELL_KEY}`,'Content-Type':'application/json'},
       body: JSON.stringify({agent_id: agent.retellId})
     });
-    const data = await res.json();
-    if (!data.access_token) throw new Error('No access token: ' + JSON.stringify(data));
-    await client.startCall({accessToken: data.access_token});
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    const { access_token } = await res.json();
+
+    const client = new RetellWebClientClass();
+    client.on('call_started', () => {
+      btn.className='btn-voice active'; btn.innerHTML='⏹ Finalizar'; btn.disabled=false;
+      status.classList.add('show');
+    });
     client.on('call_ended', () => {
       btn.className='btn-voice'; btn.innerHTML=`🎙️ Llamar a ${agent.name}`; btn.disabled=false;
       status.classList.remove('show'); activeRetellCall=null; activeAgentId=null;
     });
+    client.on('error', (e) => {
+      console.error('Call error:', e);
+      btn.className='btn-voice'; btn.innerHTML=`🎙️ Llamar a ${agent.name}`; btn.disabled=false;
+      status.classList.remove('show'); activeRetellCall=null; activeAgentId=null;
+    });
+
+    await client.startCall({ accessToken: access_token });
     activeRetellCall = client; activeAgentId = agentId;
-    btn.className='btn-voice active'; btn.innerHTML='⏹ Finalizar llamada'; btn.disabled=false;
-    status.classList.add('show');
   } catch(e) {
-    console.error('Retell error:', e);
+    console.error('toggleVoice error:', e);
     btn.className='btn-voice'; btn.innerHTML=`🎙️ Llamar a ${agent.name}`; btn.disabled=false;
     alert('Error: ' + e.message);
   }
@@ -307,9 +318,9 @@ const WELCOMES = {
   lucia:'¡Hola! Soy Lucía de AYAlgoritmo 🤖 ¿Te interesa automatizar la atención de tu negocio con IA?'
 };
 
-function openChat(agentId) {
+window.openChat = function(agentId) {
   if (!anthropicKey) {
-    switchTab('chat');
+    window.switchTab('chat');
     document.getElementById('apiSetup').style.display = 'block';
     document.getElementById('apiKeyInput').focus();
     return;
@@ -327,12 +338,12 @@ function openChat(agentId) {
   chatHistory.push({role:'assistant', content: welcome});
 }
 
-function closeChat() {
+window.closeChat = function() {
   document.getElementById('chatOverlay').classList.remove('open');
   currentChatAgent = null; chatHistory = [];
 }
-function closeChatIfOutside(e) { if(e.target.id==='chatOverlay') closeChat(); }
-function handleKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} }
+window.closeChatIfOutside = function(e) { if(e.target.id==='chatOverlay') window.closeChat(); }
+window.handleKey = function(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();window.sendMessage();} }
 
 function appendMsg(text, role) {
   const msgs = document.getElementById('chatMessages');
@@ -349,7 +360,7 @@ function showTyping() {
 }
 function removeTyping() { document.getElementById('typing-indicator')?.remove(); }
 
-async function sendMessage() {
+window.sendMessage = async function() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text || !currentChatAgent) return;
