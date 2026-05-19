@@ -9,29 +9,18 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#080909;
-  --surface:#0f1011;
-  --border:rgba(255,255,255,0.08);
-  --lime:#e8ff47;
-  --lime-dim:rgba(232,255,71,0.12);
-  --text:#eceae2;
-  --muted:rgba(236,234,226,0.45);
-  --mono:'DM Mono',monospace;
-  --sans:'DM Sans',sans-serif;
-  --display:'Syne',sans-serif;
+  --bg:#080909;--surface:#0f1011;--border:rgba(255,255,255,0.08);
+  --lime:#e8ff47;--lime-dim:rgba(232,255,71,0.12);
+  --text:#eceae2;--muted:rgba(236,234,226,0.45);
+  --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--display:'Syne',sans-serif;
 }
 body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;
   background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,0.025) 1px,transparent 0);
-  background-size:28px 28px;
-}
-
-/* NAV */
+  background-size:28px 28px;}
 nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(8,9,9,0.92);backdrop-filter:blur(12px)}
 .logo{font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:-0.02em}
 .logo span{color:var(--lime)}
 .nav-badge{font-family:var(--mono);font-size:10px;color:var(--lime);border:1px solid rgba(232,255,71,0.3);padding:4px 10px;border-radius:20px;letter-spacing:0.1em}
-
-/* HERO */
 .hero{text-align:center;padding:4rem 2rem 3rem;max-width:800px;margin:0 auto}
 .hero-tag{font-family:var(--mono);font-size:10px;color:var(--lime);letter-spacing:0.25em;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px;margin-bottom:1.5rem}
 .hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--lime);animation:pulse 2s infinite}
@@ -42,12 +31,8 @@ h1 em{font-style:normal;color:var(--lime)}
 .tabs-nav{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px}
 .tab-btn{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;padding:8px 20px;border-radius:8px;border:none;cursor:pointer;transition:all 0.2s;color:var(--muted);background:transparent;text-transform:uppercase}
 .tab-btn.active{background:var(--lime);color:#080909;font-weight:600}
-
-/* GRID */
 .agents-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;padding:2rem;max-width:1200px;margin:0 auto}
-
-/* CARD */
-.agent-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:border-color 0.2s,transform 0.2s;position:relative}
+.agent-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:border-color 0.2s,transform 0.2s}
 .agent-card:hover{border-color:rgba(232,255,71,0.25);transform:translateY(-2px)}
 .card-header{padding:1.25rem 1.25rem 1rem;display:flex;align-items:flex-start;gap:12px}
 .card-emoji{font-size:28px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.04);border-radius:10px;flex-shrink:0}
@@ -57,8 +42,6 @@ h1 em{font-style:normal;color:var(--lime)}
 .agent-industry{font-size:12px;color:var(--muted)}
 .card-desc{padding:0 1.25rem 1.25rem;font-size:13px;color:var(--muted);line-height:1.6}
 .card-actions{padding:0 1.25rem 1.25rem;display:flex;gap:8px}
-
-/* BUTTONS */
 .btn-voice{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:10px;border:none;cursor:pointer;font-family:var(--display);font-size:13px;font-weight:700;transition:all 0.2s}
 .btn-voice.idle{background:var(--lime);color:#080909}
 .btn-voice.idle:hover{opacity:0.9;transform:scale(1.02)}
@@ -66,13 +49,9 @@ h1 em{font-style:normal;color:var(--lime)}
 @keyframes ring{0%,100%{box-shadow:0 0 0 0 rgba(255,71,87,0.4)}50%{box-shadow:0 0 0 8px rgba(255,71,87,0)}}
 .btn-chat{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-family:var(--display);font-size:13px;font-weight:700;background:transparent;color:var(--text);transition:all 0.2s}
 .btn-chat:hover{border-color:rgba(232,255,71,0.4);background:var(--lime-dim)}
-
-/* STATUS */
 .voice-status{margin:0 1.25rem 1rem;font-family:var(--mono);font-size:10px;color:var(--lime);letter-spacing:0.1em;display:none;align-items:center;gap:6px}
 .voice-status.show{display:flex}
 .status-dot{width:6px;height:6px;border-radius:50%;background:var(--lime);animation:pulse 1s infinite}
-
-/* CHAT MODAL */
 .chat-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
 .chat-overlay.open{display:flex}
 .chat-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:460px;height:580px;display:flex;flex-direction:column;overflow:hidden}
@@ -85,7 +64,6 @@ h1 em{font-style:normal;color:var(--lime)}
 .chat-close:hover{background:rgba(255,255,255,0.06);color:var(--text)}
 .chat-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px}
 .chat-messages::-webkit-scrollbar{width:4px}
-.chat-messages::-webkit-scrollbar-track{background:transparent}
 .chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 .msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.5;animation:msgIn 0.2s ease}
 @keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -104,30 +82,33 @@ h1 em{font-style:normal;color:var(--lime)}
 .chat-send{width:40px;height:40px;border-radius:10px;background:var(--lime);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.2s;flex-shrink:0}
 .chat-send:hover{opacity:0.85}
 .chat-send svg{width:16px;height:16px;fill:#080909}
-
-/* FOOTER */
+.api-setup{background:var(--surface);border:1px solid rgba(232,255,71,0.2);border-radius:12px;padding:1.5rem;margin:0 2rem 2rem;max-width:600px}
+.api-setup h3{font-family:var(--display);font-size:16px;margin-bottom:0.5rem;color:var(--lime)}
+.api-setup p{font-size:13px;color:var(--muted);margin-bottom:1rem;line-height:1.5}
+.api-input-row{display:flex;gap:8px}
+.api-input{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none}
+.api-input:focus{border-color:rgba(232,255,71,0.4)}
+.api-save{background:var(--lime);color:#080909;border:none;border-radius:8px;padding:10px 20px;font-family:var(--display);font-weight:700;font-size:13px;cursor:pointer}
+.api-status{font-family:var(--mono);font-size:11px;margin-top:8px;color:var(--muted)}
+.api-status.ok{color:#60f0a0}
 footer{text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
 footer p{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.1em}
 footer strong{color:var(--lime)}
-
-/* VOICE TAB HIDDEN */
 .voice-section,.chat-section{display:none}
 .voice-section.active,.chat-section.active{display:block}
-
 @media(max-width:600px){
   nav{padding:1rem}
   .hero{padding:2.5rem 1rem 2rem}
   .agents-grid{padding:1rem;grid-template-columns:1fr}
+  .api-setup{margin:0 1rem 1rem}
 }
 </style>
 </head>
 <body>
-
 <nav>
   <div class="logo">AYAgentes<span>™</span></div>
   <div class="nav-badge">● DEMOS EN VIVO</div>
 </nav>
-
 <div class="hero">
   <div class="hero-tag">Prueba ahora mismo</div>
   <h1>6 agentes IA.<br/><em>Una demo real.</em></h1>
@@ -137,18 +118,21 @@ footer strong{color:var(--lime)}
     <button class="tab-btn" onclick="switchTab('chat')">💬 Agentes de texto</button>
   </div>
 </div>
-
-<!-- VOICE SECTION -->
 <div class="voice-section active" id="voice-section">
   <div class="agents-grid" id="voice-grid"></div>
 </div>
-
-<!-- CHAT SECTION -->
 <div class="chat-section" id="chat-section">
+  <div class="api-setup" id="apiSetup">
+    <h3>⚙️ Configurar clave API para chat</h3>
+    <p>Para activar los chats de texto necesitas ingresar tu clave de API de Anthropic. Solo se guarda en tu navegador, nunca se envía a ningún servidor externo.</p>
+    <div class="api-input-row">
+      <input class="api-input" id="apiKeyInput" type="password" placeholder="sk-ant-api..."/>
+      <button class="api-save" onclick="saveApiKey()">Guardar</button>
+    </div>
+    <div class="api-status" id="apiStatus"></div>
+  </div>
   <div class="agents-grid" id="chat-grid"></div>
 </div>
-
-<!-- CHAT MODAL -->
 <div class="chat-overlay" id="chatOverlay" onclick="closeChatIfOutside(event)">
   <div class="chat-modal" id="chatModal">
     <div class="chat-header">
@@ -170,80 +154,57 @@ footer strong{color:var(--lime)}
     </div>
   </div>
 </div>
-
 <footer>
   <p>Powered by <strong>AYAgentes™</strong> · by AYAlgoritmo · <strong>ayagentes.app</strong></p>
 </footer>
-
 <script>
 const AGENTS = [
-  {
-    id:'sofia',
-    name:'Sofía',
-    brand:'DENTALIKA',
-    industry:'Clínica dental',
-    emoji:'🦷',
-    color:'#e8ff47',
-    retellId:'agent_04f4d124276b2725238c66ba16',
-    prompt:`Eres Sofía, asistente virtual de Dentalika, una clínica dental moderna en Quito. Eres cálida, profesional y empática. Respondes en español latinoamericano neutro. Tu objetivo es agendar citas, responder dudas sobre tratamientos y calificar pacientes. Respuestas cortas (máximo 2-3 oraciones). Siempre termina con una pregunta o invitación a agendar. Si no sabes algo específico di que te comuniques con la clínica directamente.`
-  },
-  {
-    id:'andres',
-    name:'Andrés',
-    brand:'IZIHOME',
-    industry:'Casas modulares',
-    emoji:'🏗️',
-    color:'#47c8ff',
-    retellId:'agent_c0251d63e1a5356752b71e6e8d',
-    prompt:`Eres Andrés, asesor virtual de IziHome, empresa de casas modulares Steel Frame en Ecuador. Eres técnico pero accesible, apasionado por la construcción moderna. Respondes en español latinoamericano neutro. Tu objetivo es consultar modelos, precios y tiempos de entrega, y calificar leads para el equipo de ventas. Respuestas cortas (máximo 2-3 oraciones). Siempre termina con una pregunta o invitación a cotizar.`
-  },
-  {
-    id:'valeria',
-    name:'Valeria',
-    brand:'BAALBEK',
-    industry:'Restaurante libanés',
-    emoji:'🍽️',
-    color:'#ff6b47',
-    retellId:'agent_37d7ce6b4d415b898b264af234',
-    prompt:`Eres Valeria, asistente virtual de Restaurant Baalbek, el restaurante libanés más tradicional de Quito con 28 años de historia. Ubicado en Av. 6 de Diciembre N23-103 y Wilson. Eres cálida, apasionada por la gastronomía libanesa. Respondes en español latinoamericano neutro. Tu objetivo es que el cliente haga una reserva o realice un pedido a domicilio. Nunca leas listas — describe los platos de forma apetitosa. Respuestas cortas. Siempre termina con una pregunta o invitación a reservar.`
-  },
-  {
-    id:'carlos',
-    name:'Carlos',
-    brand:'NU HOUSE',
-    industry:'Hotel boutique',
-    emoji:'🏨',
-    color:'#a047ff',
-    retellId:'agent_623b412fed6a23eaa77391a10b',
-    prompt:`Eres Carlos, asistente virtual de Nu House, hotel boutique en Quito. Eres sofisticado, amable y eficiente. Respondes en español latinoamericano neutro. Tu objetivo es informar disponibilidad, gestionar reservas y describir los servicios del hotel. Respuestas cortas (máximo 2-3 oraciones). Siempre termina con una pregunta o invitación a reservar.`
-  },
-  {
-    id:'valentina',
-    name:'Valentina',
-    brand:'COLINEAL',
-    industry:'Muebles & hogar',
-    emoji:'🛋️',
-    color:'#60f0a0',
-    retellId:'agent_cc7e82d0c19ef62fccc8929817',
-    prompt:`Eres Valentina, asistente virtual de Colineal, la empresa líder de muebles y hogar en Ecuador. Eres elegante, detallista y conocedora del diseño de interiores. Respondes en español latinoamericano neutro. Tu objetivo es asesorar en salas, comedores y dormitorios, informar sobre financiamiento hasta 30 meses y agendar visitas a la tienda. Respuestas cortas. Siempre termina con una pregunta o invitación a visitar la tienda.`
-  },
-  {
-    id:'lucia',
-    name:'Lucía',
-    brand:'AYALGORITMO',
-    industry:'Agentes IA para PyMEs',
-    emoji:'🤖',
-    color:'#e8ff47',
-    retellId:'agent_ce1f215d4c0d96b6ce1b9aa897',
-    prompt:`Eres Lucía, asistente virtual de AYAlgoritmo, empresa especializada en agentes de inteligencia artificial para PyMEs en Ecuador y LATAM. Eres tecnológica, directa y apasionada por la automatización. Respondes en español latinoamericano neutro. Tu objetivo es explicar cómo funcionan los agentes IA, resolver dudas y agendar demos. Respuestas cortas (máximo 2-3 oraciones). Siempre termina con una pregunta o invitación a agendar una demo gratuita.`
-  }
+  {id:'sofia',name:'Sofía',brand:'DENTALIKA',industry:'Clínica dental',emoji:'🦷',color:'#e8ff47',
+   retellId:'agent_04f4d124276b2725238c66ba16',
+   prompt:'Eres Sofía, asistente virtual de Dentalika, clínica dental moderna en Quito. Cálida, profesional, empática. Español latinoamericano neutro. Objetivo: agendar citas, responder dudas sobre tratamientos, calificar pacientes. Respuestas cortas máximo 2-3 oraciones. Siempre termina con pregunta o invitación a agendar.'},
+  {id:'andres',name:'Andrés',brand:'IZIHOME',industry:'Casas modulares',emoji:'🏗️',color:'#47c8ff',
+   retellId:'agent_c0251d63e1a5356752b71e6e8d',
+   prompt:'Eres Andrés, asesor virtual de IziHome, empresa de casas modulares Steel Frame en Ecuador. Técnico pero accesible. Español latinoamericano neutro. Objetivo: consultar modelos, precios, tiempos de entrega y calificar leads. Respuestas cortas. Siempre termina con pregunta o invitación a cotizar.'},
+  {id:'valeria',name:'Valeria',brand:'BAALBEK',industry:'Restaurante libanés',emoji:'🍽️',color:'#ff6b47',
+   retellId:'agent_37d7ce6b4d415b898b264af234',
+   prompt:'Eres Valeria, asistente de Restaurant Baalbek, restaurante libanés en Quito con 28 años de historia. Av. 6 de Diciembre N23-103 y Wilson. Cálida, apasionada por la gastronomía libanesa. Objetivo: reservas y pedidos a domicilio. Nunca leas listas — describe platos de forma apetitosa. Respuestas cortas. Siempre termina con invitación a reservar.'},
+  {id:'carlos',name:'Carlos',brand:'NU HOUSE',industry:'Hotel boutique',emoji:'🏨',color:'#a047ff',
+   retellId:'agent_623b412fed6a23eaa77391a10b',
+   prompt:'Eres Carlos, asistente de Nu House, hotel boutique en Quito. Sofisticado, amable, eficiente. Español latinoamericano neutro. Objetivo: informar disponibilidad, gestionar reservas, describir servicios. Respuestas cortas. Siempre termina con invitación a reservar.'},
+  {id:'valentina',name:'Valentina',brand:'COLINEAL',industry:'Muebles & hogar',emoji:'🛋️',color:'#60f0a0',
+   retellId:'agent_cc7e82d0c19ef62fccc8929817',
+   prompt:'Eres Valentina, asistente de Colineal, empresa líder de muebles en Ecuador. Elegante, detallista, conocedora del diseño de interiores. Objetivo: asesorar en salas, comedores y dormitorios, financiamiento hasta 30 meses, agendar visitas. Respuestas cortas. Siempre termina con invitación a visitar la tienda.'},
+  {id:'lucia',name:'Lucía',brand:'AYALGORITMO',industry:'Agentes IA para PyMEs',emoji:'🤖',color:'#e8ff47',
+   retellId:'agent_ce1f215d4c0d96b6ce1b9aa897',
+   prompt:'Eres Lucía, asistente de AYAlgoritmo, empresa de agentes IA para PyMEs en Ecuador y LATAM. Tecnológica, directa, apasionada por la automatización. Objetivo: explicar cómo funcionan los agentes IA, resolver dudas y agendar demos. Respuestas cortas. Siempre termina con invitación a agendar demo gratuita.'}
 ];
 
-// State
+const RETELL_KEY = 'key_4b454fe4bc7f4e3abc2d6ed7083b';
 let activeRetellCall = null;
 let activeAgentId = null;
 let currentChatAgent = null;
 let chatHistory = [];
+let anthropicKey = localStorage.getItem('aya_anthropic_key') || '';
+
+// Init API key UI
+function initApiKey() {
+  if (anthropicKey) {
+    document.getElementById('apiSetup').style.display = 'none';
+  }
+}
+
+function saveApiKey() {
+  const val = document.getElementById('apiKeyInput').value.trim();
+  if (!val.startsWith('sk-ant')) {
+    document.getElementById('apiStatus').textContent = '⚠️ Clave inválida — debe empezar con sk-ant';
+    return;
+  }
+  anthropicKey = val;
+  localStorage.setItem('aya_anthropic_key', val);
+  document.getElementById('apiStatus').textContent = '✓ Clave guardada correctamente';
+  document.getElementById('apiStatus').className = 'api-status ok';
+  setTimeout(() => { document.getElementById('apiSetup').style.display = 'none'; }, 1000);
+}
 
 // Build voice cards
 const voiceGrid = document.getElementById('voice-grid');
@@ -258,10 +219,9 @@ AGENTS.forEach(agent => {
         <div class="agent-industry">${agent.industry}</div>
       </div>
     </div>
-    <div class="card-desc">Habla directamente con ${agent.name} — responde en tiempo real como si fuera un empleado de ${agent.brand}.</div>
+    <div class="card-desc">Habla con ${agent.name} en tiempo real — responde como un empleado real de ${agent.brand}.</div>
     <div class="voice-status" id="status-${agent.id}">
-      <span class="status-dot"></span>
-      <span>Conectado · Habla ahora</span>
+      <span class="status-dot"></span><span>Conectado · Habla ahora</span>
     </div>
     <div class="card-actions">
       <button class="btn-voice idle" id="btn-${agent.id}" onclick="toggleVoice('${agent.id}')">
@@ -284,7 +244,7 @@ AGENTS.forEach(agent => {
         <div class="agent-industry">${agent.industry}</div>
       </div>
     </div>
-    <div class="card-desc">Chatea con ${agent.name} — responde como el agente real de ${agent.brand}, entrenado para su industria.</div>
+    <div class="card-desc">Chatea con ${agent.name} — entrenado específicamente para ${agent.brand}.</div>
     <div class="card-actions">
       <button class="btn-chat" onclick="openChat('${agent.id}')">
         💬 Chatear con ${agent.name}
@@ -293,29 +253,24 @@ AGENTS.forEach(agent => {
   </div>`;
 });
 
-// Tab switch
 function switchTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (i===0&&tab==='voice')||(i===1&&tab==='chat')));
-  document.getElementById('voice-section').classList.toggle('active', tab==='voice');
-  document.getElementById('chat-section').classList.toggle('active', tab==='chat');
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active',(i===0&&tab==='voice')||(i===1&&tab==='chat')));
+  document.getElementById('voice-section').classList.toggle('active',tab==='voice');
+  document.getElementById('chat-section').classList.toggle('active',tab==='chat');
 }
 
-// Voice
 async function toggleVoice(agentId) {
   const agent = AGENTS.find(a => a.id === agentId);
   const btn = document.getElementById(`btn-${agentId}`);
   const status = document.getElementById(`status-${agentId}`);
-
   if (activeRetellCall && activeAgentId === agentId) {
     activeRetellCall.stopCall();
-    activeRetellCall = null;
-    activeAgentId = null;
+    activeRetellCall = null; activeAgentId = null;
     btn.className = 'btn-voice idle';
     btn.innerHTML = `🎙️ Llamar a ${agent.name}`;
     status.classList.remove('show');
     return;
   }
-
   if (activeRetellCall) {
     activeRetellCall.stopCall();
     const oldBtn = document.getElementById(`btn-${activeAgentId}`);
@@ -323,109 +278,79 @@ async function toggleVoice(agentId) {
     if (oldBtn) { oldBtn.className='btn-voice idle'; oldBtn.innerHTML=`🎙️ Llamar a ${oldAgent.name}`; }
     document.getElementById(`status-${activeAgentId}`)?.classList.remove('show');
   }
-
-  btn.innerHTML = '⏳ Conectando...';
-  btn.disabled = true;
-
+  btn.innerHTML = '⏳ Conectando...'; btn.disabled = true;
   try {
     const retellClient = new RetellWebClient();
     const res = await fetch('https://api.retellai.com/v2/create-web-call', {
       method:'POST',
-      headers:{'Authorization':'Bearer key_4b454fe4bc7f4e3abc2d6ed7083b','Content-Type':'application/json'},
+      headers:{'Authorization':`Bearer ${RETELL_KEY}`,'Content-Type':'application/json'},
       body: JSON.stringify({agent_id: agent.retellId})
     });
     const data = await res.json();
-
     await retellClient.startCall({accessToken: data.access_token});
-
     retellClient.on('call_ended', () => {
-      btn.className = 'btn-voice idle';
-      btn.innerHTML = `🎙️ Llamar a ${agent.name}`;
-      btn.disabled = false;
-      status.classList.remove('show');
-      activeRetellCall = null;
-      activeAgentId = null;
+      btn.className='btn-voice idle'; btn.innerHTML=`🎙️ Llamar a ${agent.name}`; btn.disabled=false;
+      status.classList.remove('show'); activeRetellCall=null; activeAgentId=null;
     });
-
-    activeRetellCall = retellClient;
-    activeAgentId = agentId;
-    btn.className = 'btn-voice active';
-    btn.innerHTML = `⏹ Finalizar llamada`;
-    btn.disabled = false;
+    activeRetellCall = retellClient; activeAgentId = agentId;
+    btn.className='btn-voice active'; btn.innerHTML='⏹ Finalizar llamada'; btn.disabled=false;
     status.classList.add('show');
   } catch(e) {
-    btn.className = 'btn-voice idle';
-    btn.innerHTML = `🎙️ Llamar a ${agent.name}`;
-    btn.disabled = false;
-    console.error(e);
+    btn.className='btn-voice idle'; btn.innerHTML=`🎙️ Llamar a ${agent.name}`; btn.disabled=false;
+    alert('Error al conectar. Verifica tu micrófono y recarga la página.');
   }
 }
 
-// Chat
+const WELCOMES = {
+  sofia:'¡Hola! Soy Sofía de Dentalika 🦷 ¿Buscas información sobre algún tratamiento o quieres agendar una cita?',
+  andres:'¡Hola! Soy Andrés de IziHome 🏗️ ¿Estás pensando en una casa modular? Con gusto te asesoro.',
+  valeria:'¡Hola! Bienvenido a Restaurant Baalbek, soy Valeria 🍽️ ¿Deseas hacer una reserva o tienes preguntas sobre el menú?',
+  carlos:'¡Bienvenido a Nu House! Soy Carlos 🏨 ¿Buscas disponibilidad o quieres conocer nuestros servicios?',
+  valentina:'¡Hola! Soy Valentina de Colineal 🛋️ ¿Te ayudo a encontrar el mueble perfecto para tu hogar?',
+  lucia:'¡Hola! Soy Lucía de AYAlgoritmo 🤖 ¿Te interesa automatizar la atención de tu negocio con IA?'
+};
+
 function openChat(agentId) {
+  if (!anthropicKey) {
+    switchTab('chat');
+    document.getElementById('apiSetup').style.display = 'block';
+    document.getElementById('apiKeyInput').focus();
+    return;
+  }
   currentChatAgent = AGENTS.find(a => a.id === agentId);
-  chatHistory = [{role:'system', content: currentChatAgent.prompt}];
+  chatHistory = [];
   document.getElementById('modalEmoji').textContent = currentChatAgent.emoji;
   document.getElementById('modalName').textContent = currentChatAgent.name;
   document.getElementById('modalBrand').textContent = currentChatAgent.brand;
-  const msgs = document.getElementById('chatMessages');
-  msgs.innerHTML = '';
+  document.getElementById('chatMessages').innerHTML = '';
   document.getElementById('chatOverlay').classList.add('open');
   document.getElementById('chatInput').focus();
-  // Welcome message
-  const welcome = getWelcome(agentId);
+  const welcome = WELCOMES[agentId];
   appendMsg(welcome, 'agent');
   chatHistory.push({role:'assistant', content: welcome});
 }
 
-function getWelcome(id) {
-  const w = {
-    sofia:'¡Hola! Soy Sofía de Dentalika 🦷 ¿En qué te puedo ayudar hoy? ¿Buscas información sobre algún tratamiento o quieres agendar una cita?',
-    andres:'¡Hola! Soy Andrés de IziHome 🏗️ ¿Estás pensando en construir o adquirir una casa modular? Con gusto te asesoro.',
-    valeria:'¡Hola! Bienvenido a Restaurant Baalbek, soy Valeria 🍽️ ¿Deseas hacer una reserva o tienes alguna pregunta sobre nuestro menú?',
-    carlos:'¡Bienvenido a Nu House! Soy Carlos 🏨 ¿Estás buscando disponibilidad para alguna fecha o quieres conocer nuestros servicios?',
-    valentina:'¡Hola! Soy Valentina de Colineal 🛋️ ¿Te puedo ayudar a encontrar el mueble perfecto para tu hogar?',
-    lucia:'¡Hola! Soy Lucía de AYAlgoritmo 🤖 ¿Te interesa automatizar la atención de tu negocio con IA? Con gusto te cuento cómo funciona.'
-  };
-  return w[id] || '¡Hola! ¿En qué te puedo ayudar?';
-}
-
 function closeChat() {
   document.getElementById('chatOverlay').classList.remove('open');
-  currentChatAgent = null;
-  chatHistory = [];
+  currentChatAgent = null; chatHistory = [];
 }
-
-function closeChatIfOutside(e) {
-  if (e.target.id === 'chatOverlay') closeChat();
-}
-
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-}
+function closeChatIfOutside(e) { if(e.target.id==='chatOverlay') closeChat(); }
+function handleKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} }
 
 function appendMsg(text, role) {
   const msgs = document.getElementById('chatMessages');
   const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  div.textContent = text;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
+  div.className = `msg ${role}`; div.textContent = text;
+  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
 }
-
 function showTyping() {
   const msgs = document.getElementById('chatMessages');
   const div = document.createElement('div');
-  div.className = 'msg typing';
-  div.id = 'typing-indicator';
-  div.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
+  div.className='msg typing'; div.id='typing-indicator';
+  div.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
 }
-
-function removeTyping() {
-  document.getElementById('typing-indicator')?.remove();
-}
+function removeTyping() { document.getElementById('typing-indicator')?.remove(); }
 
 async function sendMessage() {
   const input = document.getElementById('chatInput');
@@ -435,16 +360,20 @@ async function sendMessage() {
   appendMsg(text, 'user');
   chatHistory.push({role:'user', content: text});
   showTyping();
-
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': anthropicKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
       body: JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:300,
         system: currentChatAgent.prompt,
-        messages: chatHistory.filter(m => m.role !== 'system').slice(-10)
+        messages: chatHistory.filter(m=>m.role!=='system').slice(-10)
       })
     });
     const data = await res.json();
@@ -454,9 +383,11 @@ async function sendMessage() {
     chatHistory.push({role:'assistant', content: reply});
   } catch(e) {
     removeTyping();
-    appendMsg('Lo siento, hubo un problema de conexión. Intenta de nuevo.', 'agent');
+    appendMsg('Error de conexión. Verifica tu clave API e intenta de nuevo.', 'agent');
   }
 }
+
+initApiKey();
 </script>
 </body>
 </html>
