@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Demo Agentes IA — AYAgentes™</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script src="./retell.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -147,9 +148,8 @@ footer strong{color:var(--lime)}
 </div>
 <footer><p>Powered by <strong>AYAgentes™</strong> · by AYAlgoritmo · <strong>ayagentes.app</strong></p></footer>
 
-<script type="module">
+<script>
 const RETELL_KEY = 'key_f3eb9ddafab52cf429cd0bf9bd6f';
-
 const AGENTS = [
   {id:'sofia',name:'Sofía',brand:'DENTALIKA',industry:'Clínica dental',emoji:'🦷',color:'#e8ff47',
    retellId:'agent_04f4d124276b2725238c66ba16',
@@ -176,25 +176,12 @@ let activeAgentId = null;
 let currentChatAgent = null;
 let chatHistory = [];
 let anthropicKey = localStorage.getItem('aya_anthropic_key') || '';
-let RetellWebClientClass = null;
-
-// Load Retell SDK via esm.sh
-async function loadRetellSDK() {
-  try {
-    const mod = await import('https://esm.sh/retell-client-js-sdk@3.0.3');
-    RetellWebClientClass = mod.RetellWebClient;
-    console.log('Retell SDK loaded:', RetellWebClientClass);
-  } catch(e) {
-    console.error('Failed to load Retell SDK:', e);
-  }
-}
-loadRetellSDK();
 
 function initApiKey() {
   if (anthropicKey) document.getElementById('apiSetup').style.display = 'none';
 }
 
-window.saveApiKey = function() {
+function saveApiKey() {
   const val = document.getElementById('apiKeyInput').value.trim();
   if (!val.startsWith('sk-ant')) {
     document.getElementById('apiStatus').textContent = '⚠️ Clave inválida';
@@ -207,7 +194,6 @@ window.saveApiKey = function() {
   setTimeout(() => { document.getElementById('apiSetup').style.display = 'none'; }, 800);
 }
 
-// Build voice cards
 document.getElementById('voice-grid').innerHTML = AGENTS.map(a => `
   <div class="agent-card">
     <div class="card-header">
@@ -221,11 +207,10 @@ document.getElementById('voice-grid').innerHTML = AGENTS.map(a => `
     <div class="card-desc">Habla con ${a.name} en tiempo real — responde como empleado real de ${a.brand}.</div>
     <div class="voice-status" id="vs-${a.id}"><span class="status-dot"></span><span>Conectado · Habla ahora</span></div>
     <div class="card-actions">
-      <button class="btn-voice" id="vb-${a.id}" onclick="window.toggleVoice('${a.id}')">🎙️ Llamar a ${a.name}</button>
+      <button class="btn-voice" id="vb-${a.id}" onclick="toggleVoice('${a.id}')">🎙️ Llamar a ${a.name}</button>
     </div>
   </div>`).join('');
 
-// Build chat cards
 document.getElementById('chat-grid').innerHTML = AGENTS.map(a => `
   <div class="agent-card">
     <div class="card-header">
@@ -238,17 +223,17 @@ document.getElementById('chat-grid').innerHTML = AGENTS.map(a => `
     </div>
     <div class="card-desc">Chatea con ${a.name} — entrenado para ${a.brand}.</div>
     <div class="card-actions">
-      <button class="btn-chat" onclick="window.openChat('${a.id}')">💬 Chatear con ${a.name}</button>
+      <button class="btn-chat" onclick="openChat('${a.id}')">💬 Chatear con ${a.name}</button>
     </div>
   </div>`).join('');
 
-window.switchTab = function(tab) {
+function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active',(i===0&&tab==='voice')||(i===1&&tab==='chat')));
   document.getElementById('voice-section').classList.toggle('active',tab==='voice');
   document.getElementById('chat-section').classList.toggle('active',tab==='chat');
 }
 
-window.toggleVoice = async function(agentId) {
+async function toggleVoice(agentId) {
   const agent = AGENTS.find(a => a.id === agentId);
   const btn = document.getElementById(`vb-${agentId}`);
   const status = document.getElementById(`vs-${agentId}`);
@@ -272,10 +257,9 @@ window.toggleVoice = async function(agentId) {
   btn.innerHTML = '⏳ Conectando...'; btn.disabled = true;
 
   try {
-    if (!RetellWebClientClass) {
-      const mod = await import('https://esm.sh/retell-client-js-sdk@3.0.3');
-      RetellWebClientClass = mod.RetellWebClient;
-    }
+    // retell.js expone retellClientJsSdk global
+    const SDK = window.retellClientJsSdk;
+    if (!SDK || !SDK.RetellWebClient) throw new Error('SDK no cargado');
 
     const res = await fetch('https://api.retellai.com/v2/create-web-call', {
       method:'POST',
@@ -285,7 +269,7 @@ window.toggleVoice = async function(agentId) {
     if (!res.ok) throw new Error(`API error: ${res.status}`);
     const { access_token } = await res.json();
 
-    const client = new RetellWebClientClass();
+    const client = new SDK.RetellWebClient();
     client.on('call_started', () => {
       btn.className='btn-voice active'; btn.innerHTML='⏹ Finalizar'; btn.disabled=false;
       status.classList.add('show');
@@ -318,9 +302,9 @@ const WELCOMES = {
   lucia:'¡Hola! Soy Lucía de AYAlgoritmo 🤖 ¿Te interesa automatizar la atención de tu negocio con IA?'
 };
 
-window.openChat = function(agentId) {
+function openChat(agentId) {
   if (!anthropicKey) {
-    window.switchTab('chat');
+    switchTab('chat');
     document.getElementById('apiSetup').style.display = 'block';
     document.getElementById('apiKeyInput').focus();
     return;
@@ -338,12 +322,12 @@ window.openChat = function(agentId) {
   chatHistory.push({role:'assistant', content: welcome});
 }
 
-window.closeChat = function() {
+function closeChat() {
   document.getElementById('chatOverlay').classList.remove('open');
   currentChatAgent = null; chatHistory = [];
 }
-window.closeChatIfOutside = function(e) { if(e.target.id==='chatOverlay') window.closeChat(); }
-window.handleKey = function(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();window.sendMessage();} }
+function closeChatIfOutside(e) { if(e.target.id==='chatOverlay') closeChat(); }
+function handleKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} }
 
 function appendMsg(text, role) {
   const msgs = document.getElementById('chatMessages');
@@ -360,7 +344,7 @@ function showTyping() {
 }
 function removeTyping() { document.getElementById('typing-indicator')?.remove(); }
 
-window.sendMessage = async function() {
+async function sendMessage() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text || !currentChatAgent) return;
