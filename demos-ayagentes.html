@@ -280,7 +280,7 @@ async function toggleVoice(agentId) {
   }
   btn.innerHTML = '⏳ Conectando...'; btn.disabled = true;
   try {
-    const retellClient = new RetellWebClient();
+    const retellClient = new Retell.RetellWebClient();
     const res = await fetch('https://api.retellai.com/v2/create-web-call', {
       method:'POST',
       headers:{'Authorization':`Bearer ${RETELL_KEY}`,'Content-Type':'application/json'},
