@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Demo Agentes IA — AYAgentes™</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/retell-client-js-sdk@3.0.3/dist/index.umd.js"></script>
+<script src="https://unpkg.com/retell-client-js-sdk/dist/index.umd.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -42,9 +42,8 @@ h1 em{font-style:normal;color:var(--lime)}
 .agent-industry{font-size:12px;color:var(--muted)}
 .card-desc{padding:0 1.25rem 1.25rem;font-size:13px;color:var(--muted);line-height:1.6}
 .card-actions{padding:0 1.25rem 1.25rem;display:flex;gap:8px}
-.btn-voice{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:10px;border:none;cursor:pointer;font-family:var(--display);font-size:13px;font-weight:700;transition:all 0.2s}
-.btn-voice.idle{background:var(--lime);color:#080909}
-.btn-voice.idle:hover{opacity:0.9;transform:scale(1.02)}
+.btn-voice{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:10px;border:none;cursor:pointer;font-family:var(--display);font-size:13px;font-weight:700;transition:all 0.2s;background:var(--lime);color:#080909}
+.btn-voice:hover{opacity:0.9;transform:scale(1.02)}
 .btn-voice.active{background:#ff4757;color:#fff;animation:ring 1.5s infinite}
 @keyframes ring{0%,100%{box-shadow:0 0 0 0 rgba(255,71,87,0.4)}50%{box-shadow:0 0 0 8px rgba(255,71,87,0)}}
 .btn-chat{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-family:var(--display);font-size:13px;font-weight:700;background:transparent;color:var(--text);transition:all 0.2s}
@@ -124,7 +123,7 @@ footer strong{color:var(--lime)}
 <div class="chat-section" id="chat-section">
   <div class="api-setup" id="apiSetup">
     <h3>⚙️ Configurar clave API para chat</h3>
-    <p>Para activar los chats de texto necesitas ingresar tu clave de API de Anthropic. Solo se guarda en tu navegador, nunca se envía a ningún servidor externo.</p>
+    <p>Para activar los chats de texto ingresa tu clave de API de Anthropic. Solo se guarda en tu navegador.</p>
     <div class="api-input-row">
       <input class="api-input" id="apiKeyInput" type="password" placeholder="sk-ant-api..."/>
       <button class="api-save" onclick="saveApiKey()">Guardar</button>
@@ -134,7 +133,7 @@ footer strong{color:var(--lime)}
   <div class="agents-grid" id="chat-grid"></div>
 </div>
 <div class="chat-overlay" id="chatOverlay" onclick="closeChatIfOutside(event)">
-  <div class="chat-modal" id="chatModal">
+  <div class="chat-modal">
     <div class="chat-header">
       <div class="chat-agent-info">
         <div class="chat-emoji" id="modalEmoji"></div>
@@ -164,19 +163,19 @@ const AGENTS = [
    prompt:'Eres Sofía, asistente virtual de Dentalika, clínica dental moderna en Quito. Cálida, profesional, empática. Español latinoamericano neutro. Objetivo: agendar citas, responder dudas sobre tratamientos, calificar pacientes. Respuestas cortas máximo 2-3 oraciones. Siempre termina con pregunta o invitación a agendar.'},
   {id:'andres',name:'Andrés',brand:'IZIHOME',industry:'Casas modulares',emoji:'🏗️',color:'#47c8ff',
    retellId:'agent_c0251d63e1a5356752b71e6e8d',
-   prompt:'Eres Andrés, asesor virtual de IziHome, empresa de casas modulares Steel Frame en Ecuador. Técnico pero accesible. Español latinoamericano neutro. Objetivo: consultar modelos, precios, tiempos de entrega y calificar leads. Respuestas cortas. Siempre termina con pregunta o invitación a cotizar.'},
+   prompt:'Eres Andrés, asesor virtual de IziHome, casas modulares Steel Frame en Ecuador. Técnico pero accesible. Objetivo: consultar modelos, precios, tiempos de entrega y calificar leads. Respuestas cortas. Siempre termina con invitación a cotizar.'},
   {id:'valeria',name:'Valeria',brand:'BAALBEK',industry:'Restaurante libanés',emoji:'🍽️',color:'#ff6b47',
    retellId:'agent_37d7ce6b4d415b898b264af234',
-   prompt:'Eres Valeria, asistente de Restaurant Baalbek, restaurante libanés en Quito con 28 años de historia. Av. 6 de Diciembre N23-103 y Wilson. Cálida, apasionada por la gastronomía libanesa. Objetivo: reservas y pedidos a domicilio. Nunca leas listas — describe platos de forma apetitosa. Respuestas cortas. Siempre termina con invitación a reservar.'},
+   prompt:'Eres Valeria, asistente de Restaurant Baalbek, restaurante libanés en Quito con 28 años de historia. Av. 6 de Diciembre N23-103 y Wilson. Cálida, apasionada por la gastronomía libanesa. Objetivo: reservas y pedidos a domicilio. Nunca leas listas. Respuestas cortas. Siempre termina con invitación a reservar.'},
   {id:'carlos',name:'Carlos',brand:'NU HOUSE',industry:'Hotel boutique',emoji:'🏨',color:'#a047ff',
    retellId:'agent_623b412fed6a23eaa77391a10b',
-   prompt:'Eres Carlos, asistente de Nu House, hotel boutique en Quito. Sofisticado, amable, eficiente. Español latinoamericano neutro. Objetivo: informar disponibilidad, gestionar reservas, describir servicios. Respuestas cortas. Siempre termina con invitación a reservar.'},
+   prompt:'Eres Carlos, asistente de Nu House, hotel boutique en Quito. Sofisticado, amable, eficiente. Objetivo: disponibilidad, reservas, servicios. Respuestas cortas. Siempre termina con invitación a reservar.'},
   {id:'valentina',name:'Valentina',brand:'COLINEAL',industry:'Muebles & hogar',emoji:'🛋️',color:'#60f0a0',
    retellId:'agent_cc7e82d0c19ef62fccc8929817',
-   prompt:'Eres Valentina, asistente de Colineal, empresa líder de muebles en Ecuador. Elegante, detallista, conocedora del diseño de interiores. Objetivo: asesorar en salas, comedores y dormitorios, financiamiento hasta 30 meses, agendar visitas. Respuestas cortas. Siempre termina con invitación a visitar la tienda.'},
+   prompt:'Eres Valentina, asistente de Colineal, empresa líder de muebles en Ecuador. Elegante, detallista. Objetivo: asesorar en muebles, financiamiento hasta 30 meses, agendar visitas. Respuestas cortas. Siempre termina con invitación a visitar la tienda.'},
   {id:'lucia',name:'Lucía',brand:'AYALGORITMO',industry:'Agentes IA para PyMEs',emoji:'🤖',color:'#e8ff47',
    retellId:'agent_ce1f215d4c0d96b6ce1b9aa897',
-   prompt:'Eres Lucía, asistente de AYAlgoritmo, empresa de agentes IA para PyMEs en Ecuador y LATAM. Tecnológica, directa, apasionada por la automatización. Objetivo: explicar cómo funcionan los agentes IA, resolver dudas y agendar demos. Respuestas cortas. Siempre termina con invitación a agendar demo gratuita.'}
+   prompt:'Eres Lucía, asistente de AYAlgoritmo, empresa de agentes IA para PyMEs en Ecuador y LATAM. Tecnológica, directa, apasionada. Objetivo: explicar agentes IA, resolver dudas, agendar demos. Respuestas cortas. Siempre termina con invitación a demo gratuita.'}
 ];
 
 const RETELL_KEY = 'key_f3eb9ddafab52cf429cd0bf9bd6f';
@@ -186,72 +185,57 @@ let currentChatAgent = null;
 let chatHistory = [];
 let anthropicKey = localStorage.getItem('aya_anthropic_key') || '';
 
-// Init API key UI
 function initApiKey() {
-  if (anthropicKey) {
-    document.getElementById('apiSetup').style.display = 'none';
-  }
+  if (anthropicKey) document.getElementById('apiSetup').style.display = 'none';
 }
 
 function saveApiKey() {
   const val = document.getElementById('apiKeyInput').value.trim();
   if (!val.startsWith('sk-ant')) {
-    document.getElementById('apiStatus').textContent = '⚠️ Clave inválida — debe empezar con sk-ant';
+    document.getElementById('apiStatus').textContent = '⚠️ Clave inválida';
     return;
   }
   anthropicKey = val;
   localStorage.setItem('aya_anthropic_key', val);
-  document.getElementById('apiStatus').textContent = '✓ Clave guardada correctamente';
+  document.getElementById('apiStatus').textContent = '✓ Guardada';
   document.getElementById('apiStatus').className = 'api-status ok';
-  setTimeout(() => { document.getElementById('apiSetup').style.display = 'none'; }, 1000);
+  setTimeout(() => { document.getElementById('apiSetup').style.display = 'none'; }, 800);
 }
 
 // Build voice cards
-const voiceGrid = document.getElementById('voice-grid');
-AGENTS.forEach(agent => {
-  voiceGrid.innerHTML += `
-  <div class="agent-card" id="card-${agent.id}">
-    <div class="card-header">
-      <div class="card-emoji">${agent.emoji}</div>
-      <div class="card-meta">
-        <div class="agent-name">${agent.name}</div>
-        <div class="agent-brand" style="color:${agent.color}">${agent.brand}</div>
-        <div class="agent-industry">${agent.industry}</div>
-      </div>
-    </div>
-    <div class="card-desc">Habla con ${agent.name} en tiempo real — responde como un empleado real de ${agent.brand}.</div>
-    <div class="voice-status" id="status-${agent.id}">
-      <span class="status-dot"></span><span>Conectado · Habla ahora</span>
-    </div>
-    <div class="card-actions">
-      <button class="btn-voice idle" id="btn-${agent.id}" onclick="toggleVoice('${agent.id}')">
-        🎙️ Llamar a ${agent.name}
-      </button>
-    </div>
-  </div>`;
-});
-
-// Build chat cards
-const chatGrid = document.getElementById('chat-grid');
-AGENTS.forEach(agent => {
-  chatGrid.innerHTML += `
+document.getElementById('voice-grid').innerHTML = AGENTS.map(a => `
   <div class="agent-card">
     <div class="card-header">
-      <div class="card-emoji">${agent.emoji}</div>
+      <div class="card-emoji">${a.emoji}</div>
       <div class="card-meta">
-        <div class="agent-name">${agent.name}</div>
-        <div class="agent-brand" style="color:${agent.color}">${agent.brand}</div>
-        <div class="agent-industry">${agent.industry}</div>
+        <div class="agent-name">${a.name}</div>
+        <div class="agent-brand" style="color:${a.color}">${a.brand}</div>
+        <div class="agent-industry">${a.industry}</div>
       </div>
     </div>
-    <div class="card-desc">Chatea con ${agent.name} — entrenado específicamente para ${agent.brand}.</div>
+    <div class="card-desc">Habla con ${a.name} en tiempo real — responde como empleado real de ${a.brand}.</div>
+    <div class="voice-status" id="vs-${a.id}"><span class="status-dot"></span><span>Conectado · Habla ahora</span></div>
     <div class="card-actions">
-      <button class="btn-chat" onclick="openChat('${agent.id}')">
-        💬 Chatear con ${agent.name}
-      </button>
+      <button class="btn-voice" id="vb-${a.id}" onclick="toggleVoice('${a.id}')">🎙️ Llamar a ${a.name}</button>
     </div>
-  </div>`;
-});
+  </div>`).join('');
+
+// Build chat cards
+document.getElementById('chat-grid').innerHTML = AGENTS.map(a => `
+  <div class="agent-card">
+    <div class="card-header">
+      <div class="card-emoji">${a.emoji}</div>
+      <div class="card-meta">
+        <div class="agent-name">${a.name}</div>
+        <div class="agent-brand" style="color:${a.color}">${a.brand}</div>
+        <div class="agent-industry">${a.industry}</div>
+      </div>
+    </div>
+    <div class="card-desc">Chatea con ${a.name} — entrenado para ${a.brand}.</div>
+    <div class="card-actions">
+      <button class="btn-chat" onclick="openChat('${a.id}')">💬 Chatear con ${a.name}</button>
+    </div>
+  </div>`).join('');
 
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active',(i===0&&tab==='voice')||(i===1&&tab==='chat')));
@@ -259,45 +243,58 @@ function switchTab(tab) {
   document.getElementById('chat-section').classList.toggle('active',tab==='chat');
 }
 
+// Get RetellWebClient from whatever the SDK exposes
+function getRetellClient() {
+  if (typeof RetellWebClient !== 'undefined') return new RetellWebClient();
+  if (typeof Retell !== 'undefined' && Retell.RetellWebClient) return new Retell.RetellWebClient();
+  if (typeof retell !== 'undefined' && retell.RetellWebClient) return new retell.RetellWebClient();
+  if (window.RetellWebClient) return new window.RetellWebClient();
+  throw new Error('Retell SDK no disponible');
+}
+
 async function toggleVoice(agentId) {
   const agent = AGENTS.find(a => a.id === agentId);
-  const btn = document.getElementById(`btn-${agentId}`);
-  const status = document.getElementById(`status-${agentId}`);
+  const btn = document.getElementById(`vb-${agentId}`);
+  const status = document.getElementById(`vs-${agentId}`);
+
   if (activeRetellCall && activeAgentId === agentId) {
     activeRetellCall.stopCall();
     activeRetellCall = null; activeAgentId = null;
-    btn.className = 'btn-voice idle';
+    btn.className = 'btn-voice';
     btn.innerHTML = `🎙️ Llamar a ${agent.name}`;
     status.classList.remove('show');
     return;
   }
   if (activeRetellCall) {
     activeRetellCall.stopCall();
-    const oldBtn = document.getElementById(`btn-${activeAgentId}`);
-    const oldAgent = AGENTS.find(a => a.id === activeAgentId);
-    if (oldBtn) { oldBtn.className='btn-voice idle'; oldBtn.innerHTML=`🎙️ Llamar a ${oldAgent.name}`; }
-    document.getElementById(`status-${activeAgentId}`)?.classList.remove('show');
+    const ob = document.getElementById(`vb-${activeAgentId}`);
+    const oa = AGENTS.find(a => a.id === activeAgentId);
+    if (ob) { ob.className='btn-voice'; ob.innerHTML=`🎙️ Llamar a ${oa.name}`; }
+    document.getElementById(`vs-${activeAgentId}`)?.classList.remove('show');
   }
+
   btn.innerHTML = '⏳ Conectando...'; btn.disabled = true;
   try {
-    const retellClient = new Retell.RetellWebClient();
+    const client = getRetellClient();
     const res = await fetch('https://api.retellai.com/v2/create-web-call', {
       method:'POST',
       headers:{'Authorization':`Bearer ${RETELL_KEY}`,'Content-Type':'application/json'},
       body: JSON.stringify({agent_id: agent.retellId})
     });
     const data = await res.json();
-    await retellClient.startCall({accessToken: data.access_token});
-    retellClient.on('call_ended', () => {
-      btn.className='btn-voice idle'; btn.innerHTML=`🎙️ Llamar a ${agent.name}`; btn.disabled=false;
+    if (!data.access_token) throw new Error('No access token: ' + JSON.stringify(data));
+    await client.startCall({accessToken: data.access_token});
+    client.on('call_ended', () => {
+      btn.className='btn-voice'; btn.innerHTML=`🎙️ Llamar a ${agent.name}`; btn.disabled=false;
       status.classList.remove('show'); activeRetellCall=null; activeAgentId=null;
     });
-    activeRetellCall = retellClient; activeAgentId = agentId;
+    activeRetellCall = client; activeAgentId = agentId;
     btn.className='btn-voice active'; btn.innerHTML='⏹ Finalizar llamada'; btn.disabled=false;
     status.classList.add('show');
   } catch(e) {
-    btn.className='btn-voice idle'; btn.innerHTML=`🎙️ Llamar a ${agent.name}`; btn.disabled=false;
-    alert('Error al conectar. Verifica tu micrófono y recarga la página.');
+    console.error('Retell error:', e);
+    btn.className='btn-voice'; btn.innerHTML=`🎙️ Llamar a ${agent.name}`; btn.disabled=false;
+    alert('Error: ' + e.message);
   }
 }
 
@@ -340,15 +337,15 @@ function handleKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send
 function appendMsg(text, role) {
   const msgs = document.getElementById('chatMessages');
   const div = document.createElement('div');
-  div.className = `msg ${role}`; div.textContent = text;
-  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+  div.className=`msg ${role}`; div.textContent=text;
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
 }
 function showTyping() {
   const msgs = document.getElementById('chatMessages');
   const div = document.createElement('div');
   div.className='msg typing'; div.id='typing-indicator';
   div.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
-  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
 }
 function removeTyping() { document.getElementById('typing-indicator')?.remove(); }
 
@@ -378,12 +375,12 @@ async function sendMessage() {
     });
     const data = await res.json();
     removeTyping();
-    const reply = data.content?.[0]?.text || 'Lo siento, hubo un problema. Intenta de nuevo.';
+    const reply = data.content?.[0]?.text || 'Lo siento, hubo un problema.';
     appendMsg(reply, 'agent');
     chatHistory.push({role:'assistant', content: reply});
   } catch(e) {
     removeTyping();
-    appendMsg('Error de conexión. Verifica tu clave API e intenta de nuevo.', 'agent');
+    appendMsg('Error de conexión. Intenta de nuevo.', 'agent');
   }
 }
 
